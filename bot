@@ -1,0 +1,468 @@
+
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import pyqtSlot, QThreadPool, QTimer
+from qt_material import apply_stylesheet
+import random
+import time
+import requests
+import colorful as cf
+from colorama import init
+init()
+from bs4 import BeautifulSoup
+import linecache
+import re
+NUMERO_ACCOUNT = 0
+USERNAME_VECCHIO = 'nessuno'
+PUNTATE_FATTE_PER_ALGORITMO = 0
+PUNTATE_TOTALI = 0
+A_QUANTI_SECONDI_PUNTO = 0
+
+class Ui_MainWindow(object):
+    
+    def setupUi(self, MainWindow):
+        MainWindow.setObjectName('MainWindow')
+        MainWindow.resize(417, 725)
+        MainWindow.setFixedSize(417, 725)
+        apply_stylesheet(app, 'dark_amber.xml', **('theme',))
+        MainWindow.setObjectName('MainWindow')
+        MainWindow.resize(414, 725)
+        MainWindow.setAutoFillBackground(False)
+        MainWindow.setToolButtonStyle(QtCore.Qt.ToolButtonIconOnly)
+        MainWindow.setObjectName('MainWindow')
+        MainWindow.resize(414, 725)
+        MainWindow.setAutoFillBackground(False)
+        MainWindow.setToolButtonStyle(QtCore.Qt.ToolButtonIconOnly)
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName('centralwidget')
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setGeometry(QtCore.QRect(10, 10, 391, 21))
+        self.label.setAlignment(QtCore.Qt.AlignCenter)
+        self.label.setObjectName('label')
+        self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_2.setGeometry(QtCore.QRect(80, 40, 141, 21))
+        self.label_2.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.label_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_2.setObjectName('label_2')
+        self.label_3 = QtWidgets.QLabel(self.centralwidget)
+        self.label_3.setGeometry(QtCore.QRect(300, 40, 91, 21))
+        self.label_3.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_3.setObjectName('label_3')
+        self.label_5 = QtWidgets.QLabel(self.centralwidget)
+        self.label_5.setGeometry(QtCore.QRect(10, 515, 51, 16))
+        self.label_5.setObjectName('label_5')
+        self.plainTextEdit = QtWidgets.QPlainTextEdit(self.centralwidget)
+        self.plainTextEdit.setGeometry(QtCore.QRect(10, 540, 391, 141))
+        self.plainTextEdit.setObjectName('plainTextEdit')
+        self.label_6 = QtWidgets.QLabel(self.centralwidget)
+        self.label_6.setGeometry(QtCore.QRect(10, 40, 61, 21))
+        self.label_6.setObjectName('label_6')
+        self.label_7 = QtWidgets.QLabel(self.centralwidget)
+        self.label_7.setGeometry(QtCore.QRect(240, 40, 61, 21))
+        self.label_7.setObjectName('label_7')
+        self.label_11 = QtWidgets.QLabel(self.centralwidget)
+        self.label_11.setGeometry(QtCore.QRect(160, 690, 241, 20))
+        self.label_11.setObjectName('label_11')
+        self.groupBox_2 = QtWidgets.QGroupBox(self.centralwidget)
+        self.groupBox_2.setGeometry(QtCore.QRect(10, 100, 391, 141))
+        self.groupBox_2.setObjectName('groupBox_2')
+        self.label_13 = QtWidgets.QLabel(self.groupBox_2)
+        self.label_13.setGeometry(QtCore.QRect(20, 40, 71, 21))
+        self.label_13.setObjectName('label_13')
+        self.label_14 = QtWidgets.QLabel(self.groupBox_2)
+        self.label_14.setGeometry(QtCore.QRect(100, 40, 261, 21))
+        self.label_14.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_14.setObjectName('label_14')
+        self.label_15 = QtWidgets.QLabel(self.groupBox_2)
+        self.label_15.setGeometry(QtCore.QRect(20, 70, 71, 21))
+        self.label_15.setObjectName('label_15')
+        self.label_16 = QtWidgets.QLabel(self.groupBox_2)
+        self.label_16.setGeometry(QtCore.QRect(130, 70, 201, 21))
+        self.label_16.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_16.setObjectName('label_16')
+        self.label_17 = QtWidgets.QLabel(self.groupBox_2)
+        self.label_17.setGeometry(QtCore.QRect(20, 100, 71, 21))
+        self.label_17.setObjectName('label_17')
+        self.label_18 = QtWidgets.QLabel(self.groupBox_2)
+        self.label_18.setGeometry(QtCore.QRect(120, 100, 221, 21))
+        self.label_18.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_18.setObjectName('label_18')
+        self.label_20 = QtWidgets.QLabel(self.groupBox_2)
+        self.label_20.setGeometry(QtCore.QRect(340, 70, 31, 20))
+        self.label_20.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_20.setObjectName('label_20')
+        self.label_22 = QtWidgets.QLabel(self.centralwidget)
+        self.label_22.setGeometry(QtCore.QRect(10, 690, 111, 21))
+        self.label_22.setText('')
+        self.label_22.setObjectName('label_22')
+        self.label_23 = QtWidgets.QLabel(self.centralwidget)
+        self.label_23.setGeometry(QtCore.QRect(10, 70, 91, 21))
+        self.label_23.setObjectName('label_23')
+        self.label_24 = QtWidgets.QLabel(self.centralwidget)
+        self.label_24.setGeometry(QtCore.QRect(120, 70, 61, 21))
+        self.label_24.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.label_24.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_24.setObjectName('label_24')
+        self.label_25 = QtWidgets.QLabel(self.centralwidget)
+        self.label_25.setGeometry(QtCore.QRect(240, 70, 41, 21))
+        self.label_25.setObjectName('label_25')
+        self.label_26 = QtWidgets.QLabel(self.centralwidget)
+        self.label_26.setGeometry(QtCore.QRect(310, 70, 71, 21))
+        self.label_26.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_26.setObjectName('label_26')
+        self.tabWidget = QtWidgets.QTabWidget(self.centralwidget)
+        self.tabWidget.setGeometry(QtCore.QRect(10, 250, 401, 211))
+        self.tabWidget.setTabletTracking(False)
+        self.tabWidget.setAutoFillBackground(False)
+        self.tabWidget.setStyleSheet('')
+        self.tabWidget.setTabPosition(QtWidgets.QTabWidget.North)
+        self.tabWidget.setTabShape(QtWidgets.QTabWidget.Triangular)
+        self.tabWidget.setElideMode(QtCore.Qt.ElideNone)
+        self.tabWidget.setDocumentMode(False)
+        self.tabWidget.setTabsClosable(False)
+        self.tabWidget.setMovable(False)
+        self.tabWidget.setTabBarAutoHide(False)
+        self.tabWidget.setObjectName('tabWidget')
+        self.tab = QtWidgets.QWidget()
+        self.tab.setObjectName('tab')
+        self.label_27 = QtWidgets.QLabel(self.tab)
+        self.label_27.setGeometry(QtCore.QRect(10, 20, 81, 21))
+        self.label_27.setObjectName('label_27')
+        self.radioButton_4 = QtWidgets.QRadioButton(self.tab)
+        self.radioButton_4.setGeometry(QtCore.QRect(100, 20, 81, 21))
+        self.radioButton_4.setObjectName('radioButton_4')
+        self.radioButton_5 = QtWidgets.QRadioButton(self.tab)
+        self.radioButton_5.setGeometry(QtCore.QRect(100, 80, 91, 21))
+        self.radioButton_5.setObjectName('radioButton_5')
+        self.groupBox = QtWidgets.QGroupBox(self.tab)
+        self.groupBox.setGeometry(QtCore.QRect(0, 0, 391, 178))
+        self.groupBox.setTitle('')
+        self.groupBox.setObjectName('groupBox')
+        self.radioButton_6 = QtWidgets.QRadioButton(self.tab)
+        self.radioButton_6.setGeometry(QtCore.QRect(100, 50, 171, 21))
+        self.radioButton_6.setObjectName('radioButton_6')
+        self.groupBox.raise_()
+        self.label_27.raise_()
+        self.radioButton_4.raise_()
+        self.radioButton_5.raise_()
+        self.radioButton_6.raise_()
+        self.tabWidget.addTab(self.tab, '')
+        self.tab_2 = QtWidgets.QWidget()
+        self.tab_2.setObjectName('tab_2')
+        self.label_8 = QtWidgets.QLabel(self.tab_2)
+        self.label_8.setGeometry(QtCore.QRect(20, 20, 61, 21))
+        self.label_8.setObjectName('label_8')
+        self.radioButton_2 = QtWidgets.QRadioButton(self.tab_2)
+        self.radioButton_2.setGeometry(QtCore.QRect(220, 60, 61, 21))
+        self.radioButton_2.setObjectName('radioButton_2')
+        self.label_19 = QtWidgets.QLabel(self.tab_2)
+        self.label_19.setGeometry(QtCore.QRect(20, 60, 111, 21))
+        self.label_19.setObjectName('label_19')
+        self.label_10 = QtWidgets.QLabel(self.tab_2)
+        self.label_10.setGeometry(QtCore.QRect(210, 100, 71, 21))
+        self.label_10.setObjectName('label_10')
+        self.lineEdit = QtWidgets.QLineEdit(self.tab_2)
+        self.lineEdit.setGeometry(QtCore.QRect(170, 20, 111, 20))
+        self.lineEdit.setAlignment(QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+        self.lineEdit.setObjectName('lineEdit')
+        self.label_4 = QtWidgets.QLabel(self.tab_2)
+        self.label_4.setGeometry(QtCore.QRect(270, 140, 21, 20))
+        self.label_4.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_4.setObjectName('label_4')
+        self.radioButton_3 = QtWidgets.QRadioButton(self.tab_2)
+        self.radioButton_3.setGeometry(QtCore.QRect(300, 60, 71, 21))
+        self.radioButton_3.setObjectName('radioButton_3')
+        self.label_12 = QtWidgets.QLabel(self.tab_2)
+        self.label_12.setGeometry(QtCore.QRect(310, 140, 51, 20))
+        self.label_12.setObjectName('label_12')
+        self.horizontalSlider = QtWidgets.QSlider(self.tab_2)
+        self.horizontalSlider.setGeometry(QtCore.QRect(100, 140, 151, 22))
+        self.horizontalSlider.setMaximum(15)
+        self.horizontalSlider.setOrientation(QtCore.Qt.Horizontal)
+        self.horizontalSlider.setObjectName('horizontalSlider')
+        self.spinBox = QtWidgets.QSpinBox(self.tab_2)
+        self.spinBox.setGeometry(QtCore.QRect(100, 100, 81, 22))
+        self.spinBox.setMaximum(9999)
+        self.spinBox.setObjectName('spinBox')
+        self.spinBox_2 = QtWidgets.QSpinBox(self.tab_2)
+        self.spinBox_2.setGeometry(QtCore.QRect(290, 100, 81, 22))
+        self.spinBox_2.setMaximum(9999)
+        self.spinBox_2.setProperty('value', 9999)
+        self.spinBox_2.setObjectName('spinBox_2')
+        self.radioButton = QtWidgets.QRadioButton(self.tab_2)
+        self.radioButton.setGeometry(QtCore.QRect(140, 60, 61, 21))
+        self.radioButton.setObjectName('radioButton')
+        self.label_21 = QtWidgets.QLabel(self.tab_2)
+        self.label_21.setGeometry(QtCore.QRect(20, 140, 61, 21))
+        self.label_21.setObjectName('label_21')
+        self.label_9 = QtWidgets.QLabel(self.tab_2)
+        self.label_9.setGeometry(QtCore.QRect(20, 100, 71, 21))
+        self.label_9.setObjectName('label_9')
+        self.groupBox_3 = QtWidgets.QGroupBox(self.tab_2)
+        self.groupBox_3.setGeometry(QtCore.QRect(0, 0, 391, 178))
+        self.groupBox_3.setTitle('')
+        self.groupBox_3.setObjectName('groupBox_3')
+        self.groupBox_3.raise_()
+        self.label_8.raise_()
+        self.radioButton_2.raise_()
+        self.label_19.raise_()
+        self.label_10.raise_()
+        self.lineEdit.raise_()
+        self.label_4.raise_()
+        self.radioButton_3.raise_()
+        self.label_12.raise_()
+        self.horizontalSlider.raise_()
+        self.spinBox.raise_()
+        self.spinBox_2.raise_()
+        self.radioButton.raise_()
+        self.label_21.raise_()
+        self.label_9.raise_()
+        self.tabWidget.addTab(self.tab_2, '')
+        self.tab_3 = QtWidgets.QWidget()
+        self.tab_3.setObjectName('tab_3')
+        self.groupBox_4 = QtWidgets.QGroupBox(self.tab_3)
+        self.groupBox_4.setGeometry(QtCore.QRect(0, 0, 391, 178))
+        self.groupBox_4.setTitle('')
+        self.groupBox_4.setObjectName('groupBox_4')
+        self.label_29 = QtWidgets.QLabel(self.groupBox_4)
+        self.label_29.setGeometry(QtCore.QRect(10, 55, 151, 21))
+        self.label_29.setObjectName('label_29')
+        self.lineEdit_3 = QtWidgets.QLineEdit(self.groupBox_4)
+        self.lineEdit_3.setGeometry(QtCore.QRect(10, 80, 371, 20))
+        self.lineEdit_3.setObjectName('lineEdit_3')
+        self.label_30 = QtWidgets.QLabel(self.groupBox_4)
+        self.label_30.setGeometry(QtCore.QRect(10, 115, 121, 21))
+        self.label_30.setObjectName('label_30')
+        self.lineEdit_4 = QtWidgets.QLineEdit(self.groupBox_4)
+        self.lineEdit_4.setGeometry(QtCore.QRect(10, 140, 121, 20))
+        self.lineEdit_4.setObjectName('lineEdit_4')
+        self.checkBox = QtWidgets.QCheckBox(self.groupBox_4)
+        self.checkBox.setGeometry(QtCore.QRect(10, 20, 251, 21))
+        self.checkBox.setObjectName('checkBox')
+        self.tabWidget.addTab(self.tab_3, '')
+        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton.setGeometry(QtCore.QRect(50, 470, 101, 31))
+        self.pushButton.setObjectName('pushButton')
+        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_2.setGeometry(QtCore.QRect(160, 470, 101, 31))
+        self.pushButton_2.setObjectName('pushButton_2')
+        self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_3.setGeometry(QtCore.QRect(350, 470, 51, 31))
+        self.pushButton_3.setText('')
+        self.pushButton_3.setObjectName('pushButton_3')
+        self.pushButton_4 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_4.setGeometry(QtCore.QRect(290, 470, 51, 31))
+        self.pushButton_4.setText('')
+        self.pushButton_4.setObjectName('pushButton_4')
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.retranslateUi(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    
+    def retranslateUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate('MainWindow', 'Scooby-Doo 3.7'))
+        self.label.setText(_translate('MainWindow', 'Licenza'))
+        self.label_2.setText(_translate('MainWindow', '-'))
+        self.label_3.setText(_translate('MainWindow', '-'))
+        self.label_5.setText(_translate('MainWindow', 'Logs'))
+        self.label_6.setText(_translate('MainWindow', 'Username:'))
+        self.label_7.setText(_translate('MainWindow', 'Puntate:'))
+        self.groupBox_2.setTitle(_translate('MainWindow', 'Info Asta'))
+        self.label_14.setText(_translate('MainWindow', '-'))
+        self.label_16.setText(_translate('MainWindow', '-'))
+        self.label_18.setText(_translate('MainWindow', '-'))
+        self.label_20.setText(_translate('MainWindow', '0'))
+        self.label_23.setText(_translate('MainWindow', 'Puntate usate:'))
+        self.label_24.setText(_translate('MainWindow', '-'))
+        self.label_25.setText(_translate('MainWindow', 'Ping:'))
+        self.label_26.setText(_translate('MainWindow', '-'))
+        self.label_27.setText(_translate('MainWindow', 'Login type:'))
+        self.radioButton_4.setText(_translate('MainWindow', 'API'))
+        self.radioButton_5.setText(_translate('MainWindow', 'Cookie'))
+        self.radioButton_6.setText(_translate('MainWindow', 'Browser emulato'))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate('MainWindow', 'Login'))
+        self.label_8.setText(_translate('MainWindow', 'ID Asta:'))
+        self.radioButton_2.setText(_translate('MainWindow', 'Auto'))
+        self.label_19.setText(_translate('MainWindow', 'Modalit\xc3\xa0 di puntata:'))
+        self.label_10.setText(_translate('MainWindow', 'Prezzo Max.'))
+        self.label_4.setText(_translate('MainWindow', '0'))
+        self.radioButton_3.setText(_translate('MainWindow', 'Alg.'))
+        self.label_12.setText(_translate('MainWindow', 'Secondi'))
+        self.radioButton.setText(_translate('MainWindow', 'Man.'))
+        self.label_21.setText(_translate('MainWindow', 'Timer:'))
+        self.label_9.setText(_translate('MainWindow', 'Prezzo Min.'))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate('MainWindow', 'Opzioni Asta'))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate('MainWindow', 'Notifica'))
+        self.label_29.setText(_translate('MainWindow', 'Telegram bot token:'))
+        self.label_30.setText(_translate('MainWindow', 'Telegram chat ID'))
+        self.checkBox.setText(_translate('MainWindow', 'Notifica Telegram ad asta conclusa'))
+        self.pushButton.setText(_translate('MainWindow', 'GO'))
+        self.pushButton_2.setText(_translate('MainWindow', 'QU1T'))
+        self.radioButton_4.setToolTip(_translate('MainWindow', '<html><head/><body><p>Da problemi con login troppo ravvicinati nel tempo (2-3 min)</p></body></html>'))
+        self.lineEdit.setToolTip(_translate('MainWindow', '<html><head/><body><p>Attenzione! Elimina eventuali spazi!</p></body></html>'))
+        self.pushButton.setToolTip(_translate('MainWindow', '<html><head/><body><p>Prima di cliccare assicurati che tutti i campi richiesti siano compilati.</p></body></html>'))
+        self.label_13.setText(_translate('MainWindow', '\xf0\x9f\x93\xa6 Prodotto:'))
+        self.label_15.setText(_translate('MainWindow', '\xf0\x9f\x8f\x86 Vincitore:'))
+        self.label_17.setText(_translate('MainWindow', '\xf0\x9f\x92\xb8 Prezzo:'))
+        self.label_11.setText(_translate('MainWindow', '\xf0\x9f\x93\xa7 Scrivimi su Signal: +20 0155 5732909'))
+        self.pushButton_3.setText(_translate('MainWindow', '\xf0\x9f\x8c\x8d'))
+        self.pushButton_4.setText(_translate('MainWindow', '\xf0\x9f\x93\x8b'))
+        self.plainTextEdit.setReadOnly(True)
+        self.pushButton.setEnabled(False)
+        self.pushButton.clicked.connect(self.login_thread)
+        self.pushButton_2.clicked.connect(self.close)
+        self.pushButton_3.clicked.connect(self.apri_link_asta)
+        self.pushButton_4.clicked.connect(self.incolla_impostazioni)
+        self.horizontalSlider.valueChanged.connect(self.valore_slider)
+        self.radioButton.clicked.connect(self.disabilita_timer_algoritmo)
+        self.radioButton_2.clicked.connect(self.disabilita_timer_algoritmo)
+        self.radioButton_3.clicked.connect(self.disabilita_timer_algoritmo)
+        self.checkBox.stateChanged.connect(self.telegram_notification_attiva_textbot)
+        self.lineEdit_3.setEnabled(False)
+        self.lineEdit_4.setEnabled(False)
+        self.thread_manager = QThreadPool()
+        self.thread_manager.start(self.tempo_trascorso)
+        import subprocess
+        import hashlib
+        current_machine_id = str(subprocess.check_output('wmic csproduct get uuid'), 'utf-8').split('\n')[1].strip().replace('-', '')
+        LIC = linecache.getline('impostazioni.ini', 1).rstrip('\n').replace('licenza=', '')
+        ID2 = current_machine_id + str('KHBSDA82Bifb83bn32ib777kkk88')
+        ID3 = ID2.encode('utf-8')
+        hash_object = hashlib.sha256(ID3)
+        hex_dig = hash_object.hexdigest()
+        if LIC == hex_dig:
+            r = requests.get('https://github.com/007quake/tools/raw/main/lic', True, 10, **('verify', 'timeout'))
+            if hex_dig in r.text:
+                self.pushButton.setEnabled(True)
+                self.label.setStyleSheet('color: lightgreen')
+                self.label.setText('LICENZA ATTIVA')
+            else:
+                self.pushButton.setEnabled(False)
+                self.pushButton.setText('DISABLED')
+                self.label.setStyleSheet('color: orange')
+                self.label.setText('IMPOSSIBILE VERIFICARE LA LICENZA')
+                print(cf.italic_red('ERRORE: licenza trovata ma non riesco a verificarla.'))
+        elif LIC != hex_dig:
+            self.pushButton.setEnabled(False)
+            self.pushButton.setText('DISABLED')
+            self.plainTextEdit.appendPlainText('Non disponi di una licenza per usare Scooby-Doo. Puoi acquistarla scrivendo su Signal (\xc3\xa8 tipo Whatsapp) al numero +20 0155 573 2909. Il tuo HWID per la licenza \xc3\xa8: ' + current_machine_id)
+            self.label.setStyleSheet('color: red')
+            self.label.setText('IL TUO HWID: ' + current_machine_id)
+            print(cf.italic_red('Non hai una licenza valida. Il tuo HWID: ') + current_machine_id)
+            return None
+
+    
+    def tempo_trascorso(self):
+        t0 = time.time()
+        time.sleep(1)
+        t1 = time.time() - t0
+        (min, sec) = divmod(t1, 60)
+        (hour, min) = divmod(min, 60)
+        self.label_22.setText('%d:%02d:%02d' % (hour, min, sec))
+        continue
+
+    
+    def disabilita_timer_algoritmo(self):
+        if self.radioButton.isChecked() == True:
+            self.horizontalSlider.setEnabled(True)
+        elif self.radioButton_2.isChecked() == True:
+            self.horizontalSlider.setEnabled(True)
+        elif self.radioButton_3.isChecked() == True:
+            self.horizontalSlider.setEnabled(False)
+            return None
+
+    
+    def apri_link_asta(self):
+        import webbrowser
+        ID_ASTA = self.lineEdit.text()
+        if ID_ASTA == '':
+            self.plainTextEdit.appendPlainText(self.TIME() + ' Non hai impostato un ID asta!')
+            return None
+        if None != '':
+            URL_ASTA = 'https://it.bidoo.com/auction.php?a=' + str(ID_ASTA)
+            webbrowser.open(URL_ASTA, 0, **('new',))
+            return None
+
+    
+    def incolla_impostazioni(self):
+        login_method = linecache.getline('impostazioni.ini', 2).rstrip('\n').replace('login=', '')
+        if login_method == 'API':
+            self.radioButton_4.setChecked(True)
+        elif login_method == 'browser':
+            self.radioButton_6.setChecked(True)
+        elif login_method == 'cookie':
+            self.radioButton_5.setChecked(True)
+            id_asta = linecache.getline('impostazioni.ini', 3).rstrip('\n').replace('id_asta=', '')
+            self.lineEdit.setText(id_asta)
+            modalita_puntata = linecache.getline('impostazioni.ini', 4).rstrip('\n').replace('modalita_puntata=', '')
+            if modalita_puntata == 'manuale':
+                self.radioButton.setChecked(True)
+            elif modalita_puntata == 'auto':
+                self.radioButton_2.setChecked(True)
+            elif modalita_puntata == 'algoritmo':
+                self.radioButton_3.setChecked(True)
+                prezzo_min = linecache.getline('impostazioni.ini', 5).rstrip('\n').replace('prezzo_min=', '')
+                self.spinBox.setValue(int(prezzo_min))
+                prezzo_max = linecache.getline('impostazioni.ini', 6).rstrip('\n').replace('prezzo_max=', '')
+                self.spinBox_2.setValue(int(prezzo_max))
+                timer = linecache.getline('impostazioni.ini', 7).rstrip('\n').replace('timer=', '')
+                if int(timer) <= int(timer) or int(timer) <= 15:
+                    pass
+                else:
+                    0
+            elif self.radioButton_3.isChecked() == False:
+                self.horizontalSlider.setValue(int(timer))
+            notifica_telegram = linecache.getline('impostazioni.ini', 8).rstrip('\n').replace('notifica_telegram=', '')
+            if notifica_telegram == 's':
+                self.checkBox.setChecked(True)
+                telegram_token = linecache.getline('impostazioni.ini', 9).rstrip('\n').replace('telegram_token=', '')
+                self.lineEdit_3.setText(telegram_token)
+                telegram_chat_id = linecache.getline('impostazioni.ini', 10).rstrip('\n').replace('telegram_chat_id=', '')
+                self.lineEdit_4.setText(telegram_chat_id)
+            elif notifica_telegram == 'n':
+                self.checkBox.setChecked(False)
+                return None
+
+    
+    def close(self):
+        import sys
+        self.close()
+
+    
+    def login_thread(self):
+        if self.radioButton_3.isChecked():
+            self.horizontalSlider.setEnabled(False)
+            self.thread_manager.start(self.TIMER_ALGORITMO_1)
+            self.thread_manager.start(self.login)
+            return None
+
+    
+    def valore_slider(self, secondi_slider):
+        self.label_4.setText(str(secondi_slider))
+
+    
+    def telegram_notification_attiva_textbot(self):
+        if self.checkBox.isChecked():
+            self.lineEdit_3.setEnabled(True)
+            self.lineEdit_4.setEnabled(True)
+        else:
+            self.lineEdit_3.setEnabled(False)
+            self.lineEdit_4.setEnabled(False)
+            return None
+
+    
+    def telegram_notification(self, bot_message):
+        bot_token = self.lineEdit_3.text()
+        bot_chatID = self.lineEdit_4.text()
+        send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&parse_mode=Markdown&text=' + bot_message
+        requests.get(send_text)
+
+    
+    def TIME(self):
+        datetime = datetime
+        import datetime
+        now = datetime.now()
+        current_time = now.strftime('%H:%M:%S')
+        return '[' + current_time + ']'
+
+   
